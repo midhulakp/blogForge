@@ -1,5 +1,4 @@
-// src/pages/author/CreateBlog.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Container,
@@ -10,7 +9,9 @@ import {
   Select,
   MenuItem,
   Typography,
-  Paper
+  Paper,
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import api from '../../utils/axios';
@@ -23,7 +24,27 @@ const CreateBlog = () => {
     featuredImage: null
   });
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [fetchError, setFetchError] = useState(null);
+  const [fetchingCategories, setFetchingCategories] = useState(true);
   const navigate = useNavigate();
+
+  // Fetch categories when component mounts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get('/category');
+        setCategories(response.data);
+      } catch (error) {
+        setFetchError('Failed to load categories');
+        console.error('Error fetching categories:', error);
+      } finally {
+        setFetchingCategories(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,12 +72,27 @@ const CreateBlog = () => {
     setFormData({ ...formData, featuredImage: e.target.files[0] });
   };
 
+  if (fetchingCategories) {
+    return (
+      <Container maxWidth="md" sx={{ mt: 4, textAlign: 'center' }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="md" sx={{ mt: 4 }}>
       <Paper sx={{ p: 4, display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Typography variant="h5" component="h2" align="center" gutterBottom>
           Create New Blog Post
         </Typography>
+
+        {fetchError && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {fetchError}
+          </Alert>
+        )}
+
         <TextField
           label="Title"
           fullWidth
@@ -82,11 +118,11 @@ const CreateBlog = () => {
             label="Category"
             onChange={(e) => setFormData({ ...formData, categories: e.target.value })}
           >
-            <MenuItem value="Technology">Technology</MenuItem>
-            <MenuItem value="Lifestyle">Lifestyle</MenuItem>
-            <MenuItem value="Travel">Travel</MenuItem>
-            <MenuItem value="Food">Food</MenuItem>
-            <MenuItem value="Personal">Personal</MenuItem>
+            {categories.map((category) => (
+              <MenuItem key={category} value={category}>
+                {category}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
         <Box>

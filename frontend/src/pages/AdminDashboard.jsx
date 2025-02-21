@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -21,20 +21,22 @@ import {
   DialogActions,
   Tabs,
   Tab,
-} from '@mui/material';
-import Navbar from '../components/Navbar'; // Add this import
+} from "@mui/material";
+import Navbar from "../components/Navbar"; // Add this import
 
 // Fix icon imports
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit'; // Fixed typo here
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import { useNavigate } from 'react-router-dom';
-import api from '../utils/axios';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit"; // Fixed typo here
+import AddIcon from "@mui/icons-material/Add";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import PostAddIcon from "@mui/icons-material/PostAdd";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import { useNavigate } from "react-router-dom";
+import api from "../utils/axios";
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,14 +53,17 @@ const AdminDashboard = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [usersResponse, postsResponse] = await Promise.all([
-        api.get('/user'),
-        api.get('/blog')
-      ]);
+      const [usersResponse, postsResponse, categoriesResponse] =
+        await Promise.all([
+          api.get("/user"),
+          api.get("/blog"),
+          api.get("/category"),
+        ]);
       setUsers(usersResponse.data);
       setPosts(postsResponse.data.blogs);
+      setCategories(categoriesResponse.data);
     } catch (err) {
-      setError(err.response?.data.message || 'Error fetching data');
+      setError(err.response?.data.message || "Error fetching data");
     } finally {
       setLoading(false);
     }
@@ -67,20 +72,20 @@ const AdminDashboard = () => {
   const handleDeleteUser = async (userId) => {
     try {
       await api.delete(`/user/${userId}`);
-      setUsers(users.filter(user => user._id !== userId));
+      setUsers(users.filter((user) => user._id !== userId));
       setDeleteDialogOpen(false);
     } catch (err) {
-      setError(err.response?.data.message || 'Error deleting user');
+      setError(err.response?.data.message || "Error deleting user");
     }
   };
 
   const handleDeleteBlog = async (blogId) => {
     try {
       await api.delete(`/blog/${blogId}`);
-      setPosts(posts.filter(post => post._id !== blogId));
+      setPosts(posts.filter((post) => post._id !== blogId));
       setDeleteDialogOpen(false);
     } catch (err) {
-      setError(err.response?.data.message || 'Error deleting blog');
+      setError(err.response?.data.message || "Error deleting blog");
     }
   };
 
@@ -97,10 +102,9 @@ const AdminDashboard = () => {
     navigate(`/blog/${slug}`);
   };
 
+  // eslint-disable-next-line react/prop-types
   const TabPanel = ({ children, value, index }) => (
-    <Box hidden={value !== index}>
-      {value === index && children}
-    </Box>
+    <Box hidden={value !== index}>{value === index && children}</Box>
   );
 
   if (loading) return <Typography>Loading...</Typography>;
@@ -109,51 +113,60 @@ const AdminDashboard = () => {
   return (
     <Box>
       <Navbar /> {/* Add the Navbar component */}
-      <Container maxWidth="lg" sx={{ py: 4, mt: 8 }}> {/* Added mt: 8 for navbar spacing */}
-        <Typography 
-          variant="h4" 
-          sx={{ 
+      <Container maxWidth="lg" sx={{ py: 4, mt: 8 }}>
+        {" "}
+        {/* Added mt: 8 for navbar spacing */}
+        <Typography
+          variant="h4"
+          sx={{
             mb: 4,
-            fontWeight: 'bold',
-            color: 'primary.main' 
+            fontWeight: "bold",
+            color: "primary.main",
           }}
         >
           Admin Dashboard
         </Typography>
-
         {/* Stats Cards */}
         <Grid container spacing={3} sx={{ mb: 4 }}>
           {[
-            { title: 'Total Users', value: users.length, color: 'primary.main' },
-            { title: 'Total Posts', value: posts.length, color: 'secondary.main' },
-            { 
-              title: 'Active Authors', 
-              value: users.filter(user => user.role === 'author').length,
-              color: 'success.main'
-            }
+            {
+              title: "Total Users",
+              value: users.length,
+              color: "primary.main",
+            },
+            {
+              title: "Total Posts",
+              value: posts.length,
+              color: "secondary.main",
+            },
+            {
+              title: "Active Authors",
+              value: users.filter((user) => user.role === "author").length,
+              color: "success.main",
+            },
           ].map((stat, index) => (
             <Grid item xs={12} sm={4} key={index}>
-              <Card 
+              <Card
                 elevation={2}
-                sx={{ 
-                  height: '100%',
-                  transition: 'transform 0.2s',
-                  '&:hover': { transform: 'translateY(-4px)' }
+                sx={{
+                  height: "100%",
+                  transition: "transform 0.2s",
+                  "&:hover": { transform: "translateY(-4px)" },
                 }}
               >
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography 
-                    color="textSecondary" 
+                <CardContent sx={{ textAlign: "center" }}>
+                  <Typography
+                    color="textSecondary"
                     gutterBottom
-                    sx={{ fontSize: '1.1rem' }}
+                    sx={{ fontSize: "1.1rem" }}
                   >
                     {stat.title}
                   </Typography>
-                  <Typography 
+                  <Typography
                     variant="h4"
-                    sx={{ 
+                    sx={{
                       color: stat.color,
-                      fontWeight: 'bold' 
+                      fontWeight: "bold",
                     }}
                   >
                     {stat.value}
@@ -163,35 +176,34 @@ const AdminDashboard = () => {
             </Grid>
           ))}
         </Grid>
-
         {/* Tabs */}
         <Paper elevation={3} sx={{ mb: 4, borderRadius: 2 }}>
-          <Tabs 
-            value={activeTab} 
+          <Tabs
+            value={activeTab}
             onChange={handleTabChange}
-            sx={{ borderBottom: 1, borderColor: 'divider' }}
+            sx={{ borderBottom: 1, borderColor: "divider" }}
           >
             <Tab label="Users Management" />
             <Tab label="Blog Management" />
+            <Tab label="Categories Management" />
           </Tabs>
-
           {/* Users Tab */}
           <TabPanel value={activeTab} index={0}>
             <Box sx={{ p: 3 }}>
-              <Box 
-                sx={{ 
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  mb: 3
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: 3,
                 }}
               >
                 <Button
                   variant="contained"
                   startIcon={<PersonAddIcon />}
                   sx={{
-                    textTransform: 'none',
+                    textTransform: "none",
                     borderRadius: 2,
-                    px: 3
+                    px: 3,
                   }}
                 >
                   Add User
@@ -200,39 +212,41 @@ const AdminDashboard = () => {
               <TableContainer>
                 <Table>
                   <TableHead>
-                    <TableRow sx={{ backgroundColor: 'grey.50' }}>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Username</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Email</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Role</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+                    <TableRow sx={{ backgroundColor: "grey.50" }}>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        Username
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Role</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {users.map((user) => (
-                      <TableRow 
+                      <TableRow
                         key={user._id}
-                        sx={{ '&:hover': { backgroundColor: 'grey.50' } }}
+                        sx={{ "&:hover": { backgroundColor: "grey.50" } }}
                       >
                         <TableCell>{user.username}</TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
-                          <Typography 
-                            sx={{ 
-                              color: user.role === 'admin' ? 'primary.main' : 'success.main',
-                              fontWeight: 'medium'
+                          <Typography
+                            sx={{
+                              color:
+                                user.role === "admin"
+                                  ? "primary.main"
+                                  : "success.main",
+                              fontWeight: "medium",
                             }}
                           >
                             {user.role}
                           </Typography>
                         </TableCell>
                         <TableCell>
-                          <IconButton 
-                            size="small"
-                            sx={{ mr: 1 }}
-                          >
+                          <IconButton size="small" sx={{ mr: 1 }}>
                             <EditIcon color="primary" />
                           </IconButton>
-                          <IconButton 
+                          <IconButton
                             size="small"
                             onClick={() => openDeleteDialog(user)}
                           >
@@ -246,24 +260,23 @@ const AdminDashboard = () => {
               </TableContainer>
             </Box>
           </TabPanel>
-
           {/* Blogs Tab */}
           <TabPanel value={activeTab} index={1}>
             <Box sx={{ p: 3 }}>
-              <Box 
-                sx={{ 
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  mb: 3
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  mb: 3,
                 }}
               >
                 <Button
                   variant="contained"
                   startIcon={<PostAddIcon />}
                   sx={{
-                    textTransform: 'none',
+                    textTransform: "none",
                     borderRadius: 2,
-                    px: 3
+                    px: 3,
                   }}
                 >
                   Add Blog
@@ -272,37 +285,38 @@ const AdminDashboard = () => {
               <TableContainer>
                 <Table>
                   <TableHead>
-                    <TableRow sx={{ backgroundColor: 'grey.50' }}>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Title</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Author</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Category</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+                    <TableRow sx={{ backgroundColor: "grey.50" }}>
+                      <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Author</TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>
+                        Category
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {posts.map((post) => (
-                      <TableRow 
+                      <TableRow
                         key={post._id}
-                        sx={{ '&:hover': { backgroundColor: 'grey.50' } }}
+                        sx={{ "&:hover": { backgroundColor: "grey.50" } }}
                       >
                         <TableCell>{post.title}</TableCell>
-                        <TableCell>{post.author?.username || 'Unknown'}</TableCell>
+                        <TableCell>
+                          {post.author?.username || "Unknown"}
+                        </TableCell>
                         <TableCell>{post.category}</TableCell>
                         <TableCell>
-                          <IconButton 
+                          <IconButton
                             size="small"
                             sx={{ mr: 1 }}
                             onClick={() => handleViewBlog(post.slug)}
                           >
                             <VisibilityIcon color="info" />
                           </IconButton>
-                          <IconButton 
-                            size="small"
-                            sx={{ mr: 1 }}
-                          >
+                          <IconButton size="small" sx={{ mr: 1 }}>
                             <EditIcon color="primary" />
                           </IconButton>
-                          <IconButton 
+                          <IconButton
                             size="small"
                             onClick={() => {
                               setSelectedBlog(post);
@@ -319,32 +333,85 @@ const AdminDashboard = () => {
               </TableContainer>
             </Box>
           </TabPanel>
+          {/* Categories */}={" "}
+          <TabPanel value={activeTab} index={2}>
+            <Box sx={{ p: 3 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-badmin@admin.adminetween",
+                  mb: 3,
+                }}
+              >
+                <Button
+                  variant="contained"
+                  startIcon={<AddIcon />}
+                  // onClick={() => setAddCategoryDialogOpen(true)}
+                >
+                  Add Category
+                </Button>
+              </Box>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Blogs</TableCell>
+                      <TableCell>Actions</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {categories.map((category) => (
+                      <TableRow key={category}>
+                        <TableCell>{category}</TableCell>
+                        <TableCell>
+                          {
+                            posts.filter((post) => post.categories === category)
+                              .length
+                          }
+                        </TableCell>
+                        <TableCell>
+                          <IconButton>
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton>
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Box>
+          </TabPanel>
         </Paper>
-
         {/* Delete Dialog */}
         <Dialog
           open={deleteDialogOpen}
           onClose={() => setDeleteDialogOpen(false)}
           PaperProps={{
-            sx: { borderRadius: 2 }
+            sx: { borderRadius: 2 },
           }}
         >
           <DialogTitle sx={{ pb: 2 }}>Confirm Delete</DialogTitle>
           <DialogContent sx={{ py: 1 }}>
             <Typography>
-              Are you sure you want to delete {selectedUser ? 
-                `user ${selectedUser.username}` : 
-                `blog "${selectedBlog?.title}"`}?
+              Are you sure you want to delete{" "}
+              {selectedUser
+                ? `user ${selectedUser.username}`
+                : `blog "${selectedBlog?.title}"`}
+              ?
             </Typography>
           </DialogContent>
           <DialogActions sx={{ p: 2, pt: 1 }}>
-            <Button 
+            <Button
               onClick={() => setDeleteDialogOpen(false)}
-              sx={{ textTransform: 'none' }}
+              sx={{ textTransform: "none" }}
             >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={() => {
                 if (selectedUser) {
                   handleDeleteUser(selectedUser._id);
@@ -354,7 +421,7 @@ const AdminDashboard = () => {
               }}
               variant="contained"
               color="error"
-              sx={{ textTransform: 'none' }}
+              sx={{ textTransform: "none" }}
             >
               Delete
             </Button>

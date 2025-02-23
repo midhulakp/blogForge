@@ -19,40 +19,196 @@ import Comments from "./components/author/Comments";
 
 const theme = createTheme({
   palette: {
+    mode: 'light',
     primary: {
-      main: "#1976d2",
+      main: '#2563eb', // Modern blue
+      light: '#60a5fa',
+      dark: '#1e40af',
+      contrastText: '#ffffff',
     },
     secondary: {
-      main: "#dc004e",
+      main: '#db2777', // Modern pink
+      light: '#f472b6',
+      dark: '#9d174d',
+      contrastText: '#ffffff',
     },
+    error: {
+      main: '#dc2626',
+      light: '#ef4444',
+      dark: '#991b1b',
+    },
+    warning: {
+      main: '#f59e0b',
+      light: '#fbbf24',
+      dark: '#b45309',
+    },
+    info: {
+      main: '#0ea5e9',
+      light: '#38bdf8',
+      dark: '#0369a1',
+    },
+    success: {
+      main: '#059669',
+      light: '#34d399',
+      dark: '#065f46',
+    },
+    grey: {
+      50: '#f9fafb',
+      100: '#f3f4f6',
+      200: '#e5e7eb',
+      300: '#d1d5db',
+      400: '#9ca3af',
+      500: '#6b7280',
+      600: '#4b5563',
+      700: '#374151',
+      800: '#1f2937',
+      900: '#111827',
+    },
+    background: {
+      default: '#ffffff',
+      paper: '#ffffff',
+      alternative: '#f8fafc',
+    },
+    text: {
+      primary: '#111827',
+      secondary: '#4b5563',
+      disabled: '#9ca3af',
+    },
+    divider: '#e5e7eb',
   },
   typography: {
     fontFamily: [
-      "Inter",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      "Segoe UI",
-      "Roboto",
-      "Arial",
-      "sans-serif",
-    ].join(","),
+      'Inter',
+      '-apple-system',
+      'BlinkMacSystemFont',
+      'Segoe UI',
+      'Roboto',
+      'Arial',
+      'sans-serif',
+    ].join(','),
     h1: {
-      fontWeight: 700,
+      fontWeight: 800,
+      fontSize: '2.5rem',
+      lineHeight: 1.2,
+      letterSpacing: '-0.02em',
     },
     h2: {
-      fontWeight: 600,
+      fontWeight: 700,
+      fontSize: '2rem',
+      lineHeight: 1.3,
+      letterSpacing: '-0.01em',
     },
-    button: {
-      textTransform: "none",
+    h3: {
+      fontWeight: 700,
+      fontSize: '1.5rem',
+      lineHeight: 1.375,
+    },
+    h4: {
+      fontWeight: 600,
+      fontSize: '1.25rem',
+      lineHeight: 1.375,
+    },
+    h5: {
+      fontWeight: 600,
+      fontSize: '1.125rem',
+      lineHeight: 1.375,
+    },
+    h6: {
+      fontWeight: 600,
+      fontSize: '1rem',
+      lineHeight: 1.375,
+    },
+    subtitle1: {
+      fontSize: '1rem',
+      lineHeight: 1.5,
       fontWeight: 500,
     },
+    subtitle2: {
+      fontSize: '0.875rem',
+      lineHeight: 1.57,
+      fontWeight: 500,
+    },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.5,
+    },
+    body2: {
+      fontSize: '0.875rem',
+      lineHeight: 1.57,
+    },
+    button: {
+      fontSize: '0.875rem',
+      fontWeight: 600,
+      textTransform: 'none',
+      letterSpacing: '0.02em',
+    },
+    caption: {
+      fontSize: '0.75rem',
+      lineHeight: 1.66,
+    },
+    overline: {
+      fontSize: '0.75rem',
+      fontWeight: 600,
+      textTransform: 'uppercase',
+      letterSpacing: '0.08em',
+    },
   },
+  shape: {
+    borderRadius: 8,
+  },
+  shadows: [
+    'none',
+    '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
+    '0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1)',
+    '0px 4px 6px rgba(0, 0, 0, 0.05), 0px 10px 15px rgba(0, 0, 0, 0.1)',
+    // ... keep existing shadows for indexes 4-24
+  ],
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#fff",
-          color: "#000",
+          backgroundColor: '#ffffff',
+          color: '#111827',
+          boxShadow: '0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: '6px',
+          padding: '8px 16px',
+          fontWeight: 600,
+        },
+        contained: {
+          boxShadow: 'none',
+          '&:hover': {
+            boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1)',
+          },
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1)',
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: '12px',
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiOutlinedInput-root': {
+            borderRadius: '8px',
+          },
         },
       },
     },

@@ -4,35 +4,27 @@ import {
   Container,
   Typography,
   Paper,
-  Grid2 as Grid,
-  Card,
-  CardContent,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  IconButton,
-  Button,
+  Grid,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  Button,
   Tabs,
   Tab,
 } from "@mui/material";
-import Navbar from "../components/Navbar"; // Add this import
-
-// Fix icon imports
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit"; // Fixed typo here
-import AddIcon from "@mui/icons-material/Add";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import PostAddIcon from "@mui/icons-material/PostAdd";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import StatCard from "../components/admin/StatCard";
+import UsersTable from "../components/admin/UsersTable";
+import BlogsTable from "../components/admin/BlogsTable";
+import CategoriesTable from "../components/admin/CategoriesTable";
 import api from "../utils/axios";
+
+// eslint-disable-next-line react/prop-types
+const TabPanel = ({ children, value, index }) => (
+  <Box hidden={value !== index}>{value === index && children}</Box>
+);
 
 const AdminDashboard = () => {
   const [users, setUsers] = useState([]);
@@ -89,6 +81,38 @@ const AdminDashboard = () => {
     }
   };
 
+  const handleAddCategory = async (categoryName) => {
+    try {
+      const response = await api.post('/category', { name: categoryName });
+      setCategories([...categories, response.data]);
+    } catch (err) {
+      setError(err.response?.data.message || 'Error adding category');
+    }
+  };
+
+  const handleEditCategory = async (oldName, newName) => {
+    try {
+      const response = await api.patch(`/category/${oldName}`, { name: newName });
+      setCategories(categories.map(cat => cat === oldName ? response.data : cat));
+      // Update posts with new category name
+      setPosts(posts.map(post => ({
+        ...post,
+        categories: post.categories === oldName ? newName : post.categories
+      })));
+    } catch (err) {
+      setError(err.response?.data.message || 'Error updating category');
+    }
+  };
+
+  const handleDeleteCategory = async (categoryName) => {
+    try {
+      await api.delete(`/category/${categoryName}`);
+      setCategories(categories.filter(cat => cat !== categoryName));
+    } catch (err) {
+      setError(err.response?.data.message || 'Error deleting category');
+    }
+  };
+
   const openDeleteDialog = (user) => {
     setSelectedUser(user);
     setDeleteDialogOpen(true);
@@ -102,291 +126,69 @@ const AdminDashboard = () => {
     navigate(`/blog/${slug}`);
   };
 
-  // eslint-disable-next-line react/prop-types
-  const TabPanel = ({ children, value, index }) => (
-    <Box hidden={value !== index}>{value === index && children}</Box>
-  );
+  const statsData = [
+    { title: "Total Users", value: users.length, color: "primary.main" },
+    { title: "Total Posts", value: posts.length, color: "secondary.main" },
+    {
+      title: "Active Authors",
+      value: users.filter((user) => user.role === "author").length,
+      color: "success.main",
+    },
+  ];
 
   if (loading) return <Typography>Loading...</Typography>;
   if (error) return <Typography color="error">{error}</Typography>;
 
   return (
     <Box>
-      <Navbar /> {/* Add the Navbar component */}
+      <Navbar />
       <Container maxWidth="lg" sx={{ py: 4, mt: 8 }}>
-        {" "}
-        {/* Added mt: 8 for navbar spacing */}
         <Typography
           variant="h4"
-          sx={{
-            mb: 4,
-            fontWeight: "bold",
-            color: "primary.main",
-          }}
+          sx={{ mb: 4, fontWeight: "bold", color: "primary.main" }}
         >
           Admin Dashboard
         </Typography>
-        {/* Stats Cards */}
+
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          {[
-            {
-              title: "Total Users",
-              value: users.length,
-              color: "primary.main",
-            },
-            {
-              title: "Total Posts",
-              value: posts.length,
-              color: "secondary.main",
-            },
-            {
-              title: "Active Authors",
-              value: users.filter((user) => user.role === "author").length,
-              color: "success.main",
-            },
-          ].map((stat, index) => (
-            <Grid item xs={12} sm={4} key={index}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: "100%",
-                  transition: "transform 0.2s",
-                  "&:hover": { transform: "translateY(-4px)" },
-                }}
-              >
-                <CardContent sx={{ textAlign: "center" }}>
-                  <Typography
-                    color="textSecondary"
-                    gutterBottom
-                    sx={{ fontSize: "1.1rem" }}
-                  >
-                    {stat.title}
-                  </Typography>
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      color: stat.color,
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {stat.value}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+          {statsData.map((stat, index) => (
+            <StatCard key={index} {...stat} />
           ))}
         </Grid>
-        {/* Tabs */}
+
         <Paper elevation={3} sx={{ mb: 4, borderRadius: 2 }}>
-          <Tabs
-            value={activeTab}
-            onChange={handleTabChange}
-            sx={{ borderBottom: 1, borderColor: "divider" }}
-          >
+          <Tabs value={activeTab} onChange={handleTabChange}>
             <Tab label="Users Management" />
             <Tab label="Blog Management" />
             <Tab label="Categories Management" />
           </Tabs>
-          {/* Users Tab */}
+
           <TabPanel value={activeTab} index={0}>
-            <Box sx={{ p: 3 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mb: 3,
-                }}
-              >
-                <Button
-                  variant="contained"
-                  startIcon={<PersonAddIcon />}
-                  sx={{
-                    textTransform: "none",
-                    borderRadius: 2,
-                    px: 3,
-                  }}
-                >
-                  Add User
-                </Button>
-              </Box>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ backgroundColor: "grey.50" }}>
-                      <TableCell sx={{ fontWeight: "bold" }}>
-                        Username
-                      </TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>Email</TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>Role</TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {users.map((user) => (
-                      <TableRow
-                        key={user._id}
-                        sx={{ "&:hover": { backgroundColor: "grey.50" } }}
-                      >
-                        <TableCell>{user.username}</TableCell>
-                        <TableCell>{user.email}</TableCell>
-                        <TableCell>
-                          <Typography
-                            sx={{
-                              color:
-                                user.role === "admin"
-                                  ? "primary.main"
-                                  : "success.main",
-                              fontWeight: "medium",
-                            }}
-                          >
-                            {user.role}
-                          </Typography>
-                        </TableCell>
-                        <TableCell>
-                          <IconButton size="small" sx={{ mr: 1 }}>
-                            <EditIcon color="primary" />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => openDeleteDialog(user)}
-                          >
-                            <DeleteIcon color="error" />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
+            <UsersTable users={users} onDeleteUser={openDeleteDialog} />
           </TabPanel>
-          {/* Blogs Tab */}
+
           <TabPanel value={activeTab} index={1}>
-            <Box sx={{ p: 3 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  mb: 3,
-                }}
-              >
-                <Button
-                  variant="contained"
-                  startIcon={<PostAddIcon />}
-                  sx={{
-                    textTransform: "none",
-                    borderRadius: 2,
-                    px: 3,
-                  }}
-                >
-                  Add Blog
-                </Button>
-              </Box>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow sx={{ backgroundColor: "grey.50" }}>
-                      <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>Author</TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>
-                        Category
-                      </TableCell>
-                      <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {posts.map((post) => (
-                      <TableRow
-                        key={post._id}
-                        sx={{ "&:hover": { backgroundColor: "grey.50" } }}
-                      >
-                        <TableCell>{post.title}</TableCell>
-                        <TableCell>
-                          {post.author?.username || "Unknown"}
-                        </TableCell>
-                        <TableCell>{post.category}</TableCell>
-                        <TableCell>
-                          <IconButton
-                            size="small"
-                            sx={{ mr: 1 }}
-                            onClick={() => handleViewBlog(post.slug)}
-                          >
-                            <VisibilityIcon color="info" />
-                          </IconButton>
-                          <IconButton size="small" sx={{ mr: 1 }}>
-                            <EditIcon color="primary" />
-                          </IconButton>
-                          <IconButton
-                            size="small"
-                            onClick={() => {
-                              setSelectedBlog(post);
-                              setDeleteDialogOpen(true);
-                            }}
-                          >
-                            <DeleteIcon color="error" />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
+            <BlogsTable
+              posts={posts}
+              onViewBlog={handleViewBlog}
+              onDeleteBlog={(blog) => {
+                setSelectedBlog(blog);
+                setDeleteDialogOpen(true);
+              }}
+            />
           </TabPanel>
-          {/* Categories */}={" "}
+
           <TabPanel value={activeTab} index={2}>
-            <Box sx={{ p: 3 }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-badmin@admin.adminetween",
-                  mb: 3,
-                }}
-              >
-                <Button
-                  variant="contained"
-                  startIcon={<AddIcon />}
-                  // onClick={() => setAddCategoryDialogOpen(true)}
-                >
-                  Add Category
-                </Button>
-              </Box>
-              <TableContainer>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Blogs</TableCell>
-                      <TableCell>Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {categories.map((category) => (
-                      <TableRow key={category}>
-                        <TableCell>{category}</TableCell>
-                        <TableCell>
-                          {
-                            posts.filter((post) => post.categories === category)
-                              .length
-                          }
-                        </TableCell>
-                        <TableCell>
-                          <IconButton>
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton>
-                            <DeleteIcon />
-                          </IconButton>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
+            <CategoriesTable 
+              categories={categories} 
+              posts={posts}
+              onAddCategory={handleAddCategory}
+              onEditCategory={handleEditCategory}
+              onDeleteCategory={handleDeleteCategory}
+            />
           </TabPanel>
         </Paper>
-        {/* Delete Dialog */}
+
         <Dialog
           open={deleteDialogOpen}
           onClose={() => setDeleteDialogOpen(false)}

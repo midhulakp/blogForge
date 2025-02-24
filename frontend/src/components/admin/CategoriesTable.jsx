@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -15,38 +15,44 @@ import {
   DialogActions,
   TextField,
   Typography,
-  Alert
+  Alert,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material.Edit";
-import DeleteIcon from "@mui/icons-material.Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // eslint-disable-next-line react/prop-types
-const CategoriesTable = ({ categories, posts, onAddCategory, onEditCategory, onDeleteCategory }) => {
+const CategoriesTable = ({
+  categories,
+  posts,
+  onAddCategory,
+  onEditCategory,
+  onDeleteCategory,
+}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [categoryName, setCategoryName] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [error, setError] = useState('');
+  const [categoryName, setCategoryName] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [error, setError] = useState("");
 
   const handleAdd = () => {
     if (!categoryName.trim()) {
-      setError('Category name is required');
+      setError("Category name is required");
       return;
     }
     onAddCategory(categoryName);
-    setCategoryName('');
+    setCategoryName("");
     setDialogOpen(false);
   };
 
   const handleEdit = () => {
     if (!categoryName.trim()) {
-      setError('Category name is required');
+      setError("Category name is required");
       return;
     }
     onEditCategory(selectedCategory, categoryName);
-    setCategoryName('');
+    setCategoryName("");
     setEditDialogOpen(false);
   };
 
@@ -64,15 +70,15 @@ const CategoriesTable = ({ categories, posts, onAddCategory, onEditCategory, onD
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setDialogOpen(true)}
         >
           Add Category
         </Button>
       </Box>
-      
+
       <TableContainer>
         <Table>
           <TableHead>
@@ -122,7 +128,9 @@ const CategoriesTable = ({ categories, posts, onAddCategory, onEditCategory, onD
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleAdd} variant="contained">Add</Button>
+          <Button onClick={handleAdd} variant="contained">
+            Add
+          </Button>
         </DialogActions>
       </Dialog>
 
@@ -143,32 +151,39 @@ const CategoriesTable = ({ categories, posts, onAddCategory, onEditCategory, onD
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEditDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleEdit} variant="contained">Save</Button>
+          <Button onClick={handleEdit} variant="contained">
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
 
       {/* Delete Category Dialog */}
-      <Dialog open={deleteDialogOpen} onClose={() => setDeleteDialogOpen(false)}>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={() => setDeleteDialogOpen(false)}
+      >
         <DialogTitle>Delete Category</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete the category &quot;{selectedCategory}&quot;?
+            Are you sure you want to delete the category &quot;
+            {selectedCategory}&quot;?
           </Typography>
           {/* eslint-disable-next-line react/prop-types */}
-          {posts.filter((post) => post.categories === selectedCategory).length > 0 && (
-            <Alert severity="warning" sx={{ mt: 2 }}>
-              This category contains blogs. Deleting it may affect these blogs.
-            </Alert>
-          )}
+          {posts.filter((post) => post.categories === selectedCategory).length >
+            0 && (
+              <Alert severity="warning" sx={{ mt: 2 }}>
+                This category contains blogs. Deleting it may affect these blogs.
+              </Alert>
+            )}
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button 
+          <Button
             onClick={() => {
               onDeleteCategory(selectedCategory);
               setDeleteDialogOpen(false);
-            }} 
-            color="error" 
+            }}
+            color="error"
             variant="contained"
           >
             Delete

@@ -57,10 +57,7 @@ const BlogsTable = ({ posts, onViewBlog, onDeleteBlog }) => (
                 <IconButton size="small" sx={{ mr: 1 }}>
                   <EditIcon color="primary" />
                 </IconButton>
-                <IconButton
-                  size="small"
-                  onClick={() => onDeleteBlog(post)}
-                >
+                <IconButton size="small" onClick={() => onDeleteBlog(post)}>
                   <DeleteIcon color="error" />
                 </IconButton>
               </TableCell>

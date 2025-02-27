@@ -71,16 +71,17 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('token');
   };
 
-  const updateProfile = async (formData) => {
+  const updateProfile = async (formData,user) => {
+    // console.log(user);
+    
     try {
       setLoading(true);
       setError(null);
-      const { data } = await api.put('/user/profile', formData, {
+      const { data } = await api.patch(`/user/profile/${user._id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      
       setUser(data);
       localStorage.setItem('user', JSON.stringify(data));
       return true;

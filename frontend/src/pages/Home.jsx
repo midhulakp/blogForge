@@ -198,15 +198,27 @@ const Home = () => {
           <Box
             sx={{
               textAlign: 'center',
+              display: 'flex', // Use flexbox for vertical centering
+              flexDirection: 'column', // Stack children vertically
+              justifyContent: 'center', // Center children vertically
+              alignItems: 'center', // Center children horizontally
               py: 8,
               backgroundColor: 'rgba(255, 255, 255, 0.8)',
-              borderRadius: 2
+              width: '100%', // Full width
+              maxWidth: 'lg', // Same as Navbar's Container
+              mx: 'auto', // Center the box horizontally
+              height: '500px', // Specified height
+              borderRadius: 0, // Remove border-radius
+              backgroundImage: 'url("https://plus.unsplash.com/premium_photo-1674763149889-75aec93dbe19?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjF8fFdISVRFJTIwTkFUVVJFfGVufDB8fDB8fHww")', 
+              backgroundSize: 'cover', // Cover the entire area
+              backgroundPosition: 'center',
+              color: 'black', // Ensure text is readable on the background
             }}
           >
-            <Typography variant="h3" component="h1" gutterBottom>
+            <Typography variant="h3" component="h1" gutterBottom sx={{ color: 'black' }}>
               Welcome to BlogForge
             </Typography>
-            <Typography variant="h5" color="text.secondary" paragraph>
+            <Typography variant="h5" color="text.secondary" paragraph sx={{ color: 'grey' }}>
               Please sign in to view and interact with blogs.
             </Typography>
           </Box>

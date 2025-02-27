@@ -40,6 +40,7 @@ export const login = asyncHandler(async (req, res, next) => {
     let token = await generateToken(existingUser._id);
     
     res.status(200).json({
+        _id: existingUser._id,
         username: existingUser.username,
         photo: existingUser.photo,
         email: existingUser.email,
@@ -50,8 +51,8 @@ export const login = asyncHandler(async (req, res, next) => {
 
 export const updateProfile=asyncHandler(async(req,res,next)=>{
     let {id}=req.params;
-    await User.findByIdAndUpdate(id,{photo:req.file?.path},{new:true})
-    res.sendStatus(201)
+    let updatedUSer=await User.findByIdAndUpdate(id,{photo:req.file?.path},{new:true})
+    res.status(201).json(updatedUSer)
 })
 
 export const forgortPassword=asyncHandler(async(req,res,next)=>{

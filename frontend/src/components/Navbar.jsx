@@ -17,6 +17,9 @@ import AccountSettings from './AccountSettings';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+
+  
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [openSettings, setOpenSettings] = useState(false);
 
@@ -69,7 +72,15 @@ const Navbar = () => {
   };
 
   return (
-    <AppBar position="fixed" sx={{ backgroundColor: 'white', boxShadow: 1 }}>
+    <AppBar 
+      position="fixed" 
+      sx={{ 
+        backgroundColor: '#121212', // Dark background
+        color: 'white', // Light text
+        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)', // Subtle shadow
+        transition: 'background-color 0.3s ease', // Smooth transition
+      }}
+    >
       <Toolbar>
         <Typography
           variant="h6"
@@ -79,7 +90,11 @@ const Navbar = () => {
             flexGrow: 1, 
             textDecoration: 'none', 
             color: 'inherit',
-            fontWeight: 700 
+            fontWeight: 700,
+            '&:hover': { // Hover effect
+              color: '#90caf9', // Lighter blue on hover
+            },
+            transition: 'color 0.3s ease',
           }}
         >
           BlogForge
@@ -90,6 +105,11 @@ const Navbar = () => {
             color="inherit" 
             component={RouterLink} 
             to="/contact"
+            sx={{
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.08)', // Subtle background on hover
+              },
+            }}
           >
             Contact
           </Button>
@@ -100,7 +120,7 @@ const Navbar = () => {
                 <Avatar 
                   src={user.photo} 
                   alt={user.username}
-                  sx={{ width: 32, height: 32 }}
+                  sx={{ width: 32, height: 32, bgcolor: '#64b5f6' }} // Use a default background color
                 >
                   {user.username?.charAt(0).toUpperCase()}
                 </Avatar>
@@ -117,6 +137,12 @@ const Navbar = () => {
                   vertical: 'top',
                   horizontal: 'right',
                 }}
+                PaperProps={{ // Styling the menu
+                  style: {
+                    backgroundColor: '#1e1e1e',
+                    color: 'white',
+                  },
+                }}
               >
                 {renderMenuItems()}
               </Menu>
@@ -127,6 +153,11 @@ const Navbar = () => {
                 color="inherit" 
                 component={RouterLink} 
                 to="/signin"
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  },
+                }}
               >
                 Sign In
               </Button>
@@ -134,6 +165,11 @@ const Navbar = () => {
                 color="inherit" 
                 component={RouterLink} 
                 to="/signup"
+                sx={{
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                  },
+                }}
               >
                 Sign Up
               </Button>

@@ -16,6 +16,8 @@ import { useAuth } from '../context/AuthContext';
 
 const AccountSettings = ({ open, onClose }) => {
   const { user, updateProfile } = useAuth();
+  // console.log("c",user);
+  
   const [formData, setFormData] = useState({
     username: user?.username || '',
     email: user?.email || '',
@@ -52,7 +54,7 @@ const AccountSettings = ({ open, onClose }) => {
     }
 
     try {
-      await updateProfile(formDataToSend);
+      await updateProfile(formDataToSend,user);
       onClose();
     } catch (error) {
       console.error('Failed to update profile:', error);

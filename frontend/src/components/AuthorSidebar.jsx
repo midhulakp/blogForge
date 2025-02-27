@@ -20,28 +20,23 @@ const drawerWidth = 240;
 const menuItems = [
   {
     text: 'Dashboard',
-    icon: <DashboardIcon />,
+    icon: <DashboardIcon sx={{ color: 'white' }} />,
     path: '/author/dashboard'
   },
   {
     text: 'My Blogs',
-    icon: <ArticleIcon />,
+    icon: <ArticleIcon sx={{ color: 'white' }} />,
     path: '/author/blogs'
   },
   {
     text: 'Create Blog',
-    icon: <AddCircleIcon />,
+    icon: <AddCircleIcon sx={{ color: 'white' }} />,
     path: '/author/blogs/new'
   },
   {
     text: 'Comments',
-    icon: <CommentIcon />,
+    icon: <CommentIcon sx={{ color: 'white' }} />,
     path: '/author/comments'
-  },
-  {
-    text: 'Analytics',
-    icon: <AnalyticsIcon />,
-    path: '/author/analytics'
   }
 ];
 
@@ -58,17 +53,18 @@ const AuthorSidebar = () => {
           width: drawerWidth,
           boxSizing: 'border-box',
           borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-          backgroundColor: '#f5f5f5'
+          backgroundColor: '#303030', // Dark background color
+          color: '#fff', // White text color for better readability
         },
       }}
     >
-      <Box sx={{ overflow: 'auto', mt: 8 }}>
+      <Box sx={{ overflow: 'auto', mt: 8, color: '#f0f0f0' }}>
         <Box sx={{ p: 2 }}>
-          <Typography variant="h6" color="primary" sx={{ fontWeight: 'bold' }}>
+          <Typography variant="h6" color="white" sx={{ fontWeight: 'bold' }}>
             Author Dashboard
           </Typography>
         </Box>
-        <Divider />
+        <Divider sx={{ backgroundColor: 'rgba(255, 255, 255, 0.12)' }} />
         <List>
           {menuItems.map((item) => (
             <ListItem
@@ -95,7 +91,7 @@ const AuthorSidebar = () => {
                 primary={item.text}
                 sx={{
                   '& .MuiListItemText-primary': {
-                    color: location.pathname === item.path ? 'primary.main' : 'inherit',
+                    color: 'white',
                     fontWeight: location.pathname === item.path ? 600 : 400
                   }
                 }}

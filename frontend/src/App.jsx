@@ -19,199 +19,191 @@ import Comments from "./components/author/Comments";
 
 const theme = createTheme({
   palette: {
-    mode: "light",
+    mode: "light", // Or 'dark' for dark mode
     primary: {
-      main: "#2563eb", // Modern blue
-      light: "#60a5fa",
-      dark: "#1e40af",
-      contrastText: "#ffffff",
+      main: "#6750a4", // Deep Purple 500
+      light: "#9a7dc2", // Deep Purple 300
+      dark: "#47377a", // Deep Purple 700
+      contrastText: "#fff",
     },
     secondary: {
-      main: "#db2777", // Modern pink
-      light: "#f472b6",
-      dark: "#9d174d",
-      contrastText: "#ffffff",
+      main: "#e3b505", // Amber 500
+      light: "#ffdd4b", // Amber 300
+      dark: "#b8860b", // Amber 700
+      contrastText: "#000",
     },
     error: {
-      main: "#dc2626",
-      light: "#ef4444",
-      dark: "#991b1b",
+      main: "#b00020", // Red 700
+      light: "#f2b8b5", // Red 300
+      dark: "#7a0019", // Red 900
+      contrastText: "#fff",
     },
     warning: {
-      main: "#f59e0b",
-      light: "#fbbf24",
-      dark: "#b45309",
+      main: "#ffb300", // Amber 500
+      light: "#ffe54c", // Amber 300
+      dark: "#c68400", // Amber 700
+      contrastText: "#000",
     },
     info: {
-      main: "#0ea5e9",
-      light: "#38bdf8",
-      dark: "#0369a1",
+      main: "#29b6f6", // Light Blue 500
+      light: "#73e8ff", // Light Blue 300
+      dark: "#0086c3", // Light Blue 700
+      contrastText: "#000",
     },
     success: {
-      main: "#059669",
-      light: "#34d399",
-      dark: "#065f46",
+      main: "#388e3c", // Green 700
+      light: "#6abf69", // Green 300
+      dark: "#00600f", // Green 900
+      contrastText: "#fff",
     },
     grey: {
-      50: "#f9fafb",
-      100: "#f3f4f6",
-      200: "#e5e7eb",
-      300: "#d1d5db",
-      400: "#9ca3af",
-      500: "#6b7280",
-      600: "#4b5563",
-      700: "#374151",
-      800: "#1f2937",
-      900: "#111827",
+      50: "#f8f9fa",
+      100: "#e9ecef",
+      200: "#dee2e6",
+      300: "#ced4da",
+      400: "#adb5bd",
+      500: "#6c757d",
+      600: "#495057",
+      700: "#343a40",
+      800: "#212529",
+      900: "#121212",
     },
     background: {
-      default: "#ffffff",
-      paper: "#ffffff",
-      alternative: "#f8fafc",
+      default: "#f8f9fa", // Light Grey
+      paper: "#fff", // White
     },
     text: {
-      primary: "#111827",
-      secondary: "#4b5563",
-      disabled: "#9ca3af",
+      primary: "#212529", // Dark Grey
+      secondary: "#495057", // Medium Grey
+      disabled: "#adb5bd", // Light Grey
     },
-    divider: "#e5e7eb",
   },
   typography: {
-    fontFamily: [
-      "Inter",
-      "-apple-system",
-      "BlinkMacSystemFont",
-      "Segoe UI",
-      "Roboto",
-      "Arial",
-      "sans-serif",
-    ].join(","),
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 700,
     h1: {
-      fontWeight: 800,
-      fontSize: "2.5rem",
+      fontSize: "3rem",
+      fontWeight: 500,
       lineHeight: 1.2,
-      letterSpacing: "-0.02em",
+      letterSpacing: "-0.01562em",
     },
     h2: {
-      fontWeight: 700,
-      fontSize: "2rem",
-      lineHeight: 1.3,
-      letterSpacing: "-0.01em",
+      fontSize: "2.5rem",
+      fontWeight: 500,
+      lineHeight: 1.2,
+      letterSpacing: "-0.00833em",
     },
     h3: {
-      fontWeight: 700,
-      fontSize: "1.5rem",
-      lineHeight: 1.375,
+      fontSize: "2rem",
+      fontWeight: 400,
+      lineHeight: 1.3,
+      letterSpacing: "0em",
     },
     h4: {
-      fontWeight: 600,
-      fontSize: "1.25rem",
-      lineHeight: 1.375,
+      fontSize: "1.75rem",
+      fontWeight: 400,
+      lineHeight: 1.3,
+      letterSpacing: "0.00735em",
     },
     h5: {
-      fontWeight: 600,
-      fontSize: "1.125rem",
-      lineHeight: 1.375,
+      fontSize: "1.5rem",
+      fontWeight: 400,
+      lineHeight: 1.3,
+      letterSpacing: "0em",
     },
     h6: {
-      fontWeight: 600,
-      fontSize: "1rem",
-      lineHeight: 1.375,
+      fontSize: "1.25rem",
+      fontWeight: 400,
+      lineHeight: 1.3,
+      letterSpacing: "0.0075em",
     },
     subtitle1: {
       fontSize: "1rem",
+      fontWeight: 400,
       lineHeight: 1.5,
-      fontWeight: 500,
+      letterSpacing: "0.00938em",
     },
     subtitle2: {
       fontSize: "0.875rem",
-      lineHeight: 1.57,
       fontWeight: 500,
+      lineHeight: 1.57,
+      letterSpacing: "0.00714em",
     },
     body1: {
       fontSize: "1rem",
+      fontWeight: 400,
       lineHeight: 1.5,
+      letterSpacing: "0.00938em",
     },
     body2: {
       fontSize: "0.875rem",
+      fontWeight: 400,
       lineHeight: 1.57,
+      letterSpacing: "0.01071em",
     },
     button: {
       fontSize: "0.875rem",
-      fontWeight: 600,
-      textTransform: "none",
-      letterSpacing: "0.02em",
+      fontWeight: 500,
+      lineHeight: 1.75,
+      letterSpacing: "0.02857em",
+      textTransform: "uppercase",
     },
     caption: {
       fontSize: "0.75rem",
+      fontWeight: 400,
       lineHeight: 1.66,
+      letterSpacing: "0.03333em",
     },
     overline: {
       fontSize: "0.75rem",
-      fontWeight: 600,
+      fontWeight: 400,
+      lineHeight: 2.66,
+      letterSpacing: "0.08333em",
       textTransform: "uppercase",
-      letterSpacing: "0.08em",
     },
   },
   shape: {
     borderRadius: 8,
   },
-  shadows: [
-    "none",
-    "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
-    "0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1)",
-    "0px 4px 6px rgba(0, 0, 0, 0.05), 0px 10px 15px rgba(0, 0, 0, 0.1)",
-    // ... keep existing shadows for indexes 4-24
-  ],
   components: {
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#ffffff",
-          color: "#111827",
-          boxShadow:
-            "0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1)",
-        },
-      },
-    },
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: "6px",
-          padding: "8px 16px",
-          fontWeight: 600,
-        },
-        contained: {
+          borderRadius: 24,
+          textTransform: "none",
           boxShadow: "none",
           "&:hover": {
-            boxShadow:
-              "0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1)",
+            boxShadow: "none",
           },
+        },
+        containedPrimary: {
+          color: "#fff",
         },
       },
     },
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: "12px",
-          boxShadow:
-            "0px 2px 4px rgba(0, 0, 0, 0.06), 0px 4px 6px rgba(0, 0, 0, 0.1)",
+          borderRadius: 12,
+          boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
         },
       },
     },
     MuiPaper: {
       styleOverrides: {
         root: {
-          borderRadius: "12px",
+          boxShadow: "0px 2px 10px rgba(0, 0, 0, 0.1)",
         },
       },
     },
-    MuiTextField: {
+    MuiAppBar: {
       styleOverrides: {
         root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: "8px",
-          },
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.05)",
         },
       },
     },
@@ -232,7 +224,6 @@ const App = () => {
               <Route path="/" element={<Home />} />
 
               {/* Protected Routes */}
-
               <Route
                 path="/blog/:slug"
                 element={

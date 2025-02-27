@@ -8,6 +8,7 @@ import {
   IconButton,
   Box,
   Button,
+  Paper,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -26,14 +27,14 @@ const BlogsTable = ({ posts, onViewBlog, onDeleteBlog }) => (
         Add Blog
       </Button>
     </Box>
-    <TableContainer>
+    <TableContainer component={Paper} sx={{ backgroundColor: "#303030", color: "#fff" }}>
       <Table>
         <TableHead>
-          <TableRow sx={{ backgroundColor: "grey.50" }}>
-            <TableCell sx={{ fontWeight: "bold" }}>Title</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Author</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Category</TableCell>
-            <TableCell sx={{ fontWeight: "bold" }}>Actions</TableCell>
+          <TableRow sx={{ backgroundColor: "#424242" }}>
+            <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>Title</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>Author</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>Category</TableCell>
+            <TableCell sx={{ fontWeight: "bold", color: "#fff" }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,23 +42,23 @@ const BlogsTable = ({ posts, onViewBlog, onDeleteBlog }) => (
           {posts.map((post) => (
             <TableRow
               key={post._id}
-              sx={{ "&:hover": { backgroundColor: "grey.50" } }}
+              sx={{ "&:hover": { backgroundColor: "rgba(255,255,255,0.1)" }, color: "#fff" }}
             >
-              <TableCell>{post.title}</TableCell>
-              <TableCell>{post.author?.username || "Unknown"}</TableCell>
-              <TableCell>{post.category}</TableCell>
+              <TableCell sx={{ color: "#fff" }}>{post.title}</TableCell>
+              <TableCell sx={{ color: "#fff" }}>{post.author?.username || "Unknown"}</TableCell>
+              <TableCell sx={{ color: "#fff" }}>{post.category}</TableCell>
               <TableCell>
                 <IconButton
                   size="small"
-                  sx={{ mr: 1 }}
+                  sx={{ mr: 1, color: "#fff" }}
                   onClick={() => onViewBlog(post.slug)}
                 >
                   <VisibilityIcon color="info" />
                 </IconButton>
-                <IconButton size="small" sx={{ mr: 1 }}>
+                <IconButton size="small" sx={{ mr: 1, color: "#fff" }}>
                   <EditIcon color="primary" />
                 </IconButton>
-                <IconButton size="small" onClick={() => onDeleteBlog(post)}>
+                <IconButton size="small" sx={{ color: "#fff" }} onClick={() => onDeleteBlog(post)}>
                   <DeleteIcon color="error" />
                 </IconButton>
               </TableCell>
